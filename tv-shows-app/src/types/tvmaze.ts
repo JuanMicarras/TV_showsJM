@@ -10,7 +10,6 @@ export interface Show {
     original: string;
   } | null;
   summary: string;
-  
   language: string;
   status: string;
   runtime: number | null;
@@ -24,9 +23,13 @@ export interface Show {
   network: {
     name: string;
   } | null;
+  
+  _embedded?: {
+    seasons?: any[];
+    episodes?: any[];
+  };
 }
 
-// La API de TVMaze cuando buscas un show devuelve un objeto con el show adentro
 export interface ShowSearchResult {
   score: number;
   show: Show;

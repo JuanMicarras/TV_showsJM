@@ -11,7 +11,7 @@ interface DetailProps {
 export default function Detail({ favorites, toggleFavorite }: DetailProps) {
   // useParams captura el ":id" de la URL
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate(); // Para el botón de "Volver"
+  const navigate = useNavigate(); 
 
   const [show, setShow] = useState<Show | null>(null);
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,8 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
     const fetchShowDetail = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`https://api.tvmaze.com/shows/${id}`);
+        
+        const response = await fetch(`https://api.tvmaze.com/shows/${id}?embed[]=seasons&embed[]=episodes`);
         
         if (response.status === 404) {
           throw new Error('Serie no encontrada (404)');
@@ -141,6 +142,19 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
             <div>
               <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Estreno</span>
               <p className="text-slate-200 text-sm font-medium">{show.premiered || 'N/A'}</p>
+            </div>
+            <div>
+              <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Temporadas</span>
+              <p className="text-slate-200 text-sm font-medium">
+                {show._embedded?.seasons?.length || 'N/A'}
+              </p>
+            </div>
+
+            <div>
+              <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Episodios</span>
+              <p className="text-slate-200 text-sm font-medium">
+                {show._embedded?.episodes?.length || 'N/A'}
+              </p>
             </div>
 
             {show.schedule?.days.length > 0 && (
