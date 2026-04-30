@@ -7,7 +7,6 @@ interface ConfirmModalProps {
   onCancel: () => void;
 }
 
-// Usamos forwardRef para poder pasar el useRef desde el componente padre (Card) hasta este <dialog>
 const ConfirmModal = forwardRef<HTMLDialogElement, ConfirmModalProps>(
   ({ title, message, onConfirm, onCancel }, ref) => {
     return (

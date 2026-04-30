@@ -25,15 +25,14 @@ export default function Card({ show, isFavorite, toggleFavorite }: CardProps) {
     }
   };
 
-  // Funciones que le pasaremos al modal
   const handleConfirmRemove = () => {
-    toggleFavorite(show); // Ejecuta la acción de quitar
+    toggleFavorite(show);
     toast.error(`${show.name} eliminado de favoritos`);
-    modalRef.current?.close(); // Cierra el modal
+    modalRef.current?.close(); 
   };
 
   const handleCancelRemove = () => {
-    modalRef.current?.close(); // Solo cierra el modal
+    modalRef.current?.close(); 
   };
 
   const imageUrl = show.image?.medium || 'https://via.placeholder.com/210x295?text=No+Image';
@@ -41,7 +40,6 @@ export default function Card({ show, isFavorite, toggleFavorite }: CardProps) {
   return (
     <div className="bg-slate-800 rounded-xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 transition-all flex flex-col h-full border border-slate-700 relative">
       
-      {/* Botón de Favorito */}
       <button 
         onClick={handleFavoriteClick}
         className="absolute top-2 right-2 p-2 bg-slate-900/80 rounded-full hover:bg-slate-700 transition z-10"
@@ -68,7 +66,7 @@ export default function Card({ show, isFavorite, toggleFavorite }: CardProps) {
         </Link>
       </div>
 
-      {/* Renderizamos el Modal dentro de la tarjeta, pero estará oculto hasta llamar a showModal() */}
+      
       <ConfirmModal 
         ref={modalRef}
         title="¿Quitar de Favoritos?"

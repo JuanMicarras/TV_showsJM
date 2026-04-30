@@ -14,7 +14,6 @@ export default function Favorites({ favorites, toggleFavorite }: FavoritesProps)
         <p className="text-slate-400">Las series que tienes guardadas en tu bóveda</p>
       </div>
 
-      {/* Estado Empty: Cuando el array de favoritos está vacío */}
       {favorites.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 bg-slate-800/50 rounded-xl border border-slate-700 border-dashed">
           <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-slate-500 mb-4">
@@ -24,13 +23,11 @@ export default function Favorites({ favorites, toggleFavorite }: FavoritesProps)
           <p className="text-slate-500">Explora el catálogo y guarda algunas series para tu próxima maratón.</p>
         </div>
       ) : (
-        /* Reutilizamos el componente Card para mostrar los favoritos */
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {favorites.map((show) => (
             <Card 
               key={show.id} 
               show={show} 
-              // Como estamos en la vista de favoritos, siempre es true aquí
               isFavorite={true} 
               toggleFavorite={toggleFavorite} 
             />

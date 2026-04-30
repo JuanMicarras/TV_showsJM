@@ -5,36 +5,28 @@ import toast from 'react-hot-toast';
 export default function Contact() {
   const navigate = useNavigate();
   
-  // 1. Estados para los valores del Formulario
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  // 2. Estado para saber si el usuario ya interactuó con el campo ("touched")
   const [touched, setTouched] = useState({
     name: false,
     email: false,
     message: false,
   });
 
-  // 3. Referencia para el elemento <dialog> nativo
   const modalRef = useRef<HTMLDialogElement>(null);
 
-  // 4. Lógica de validación estricta
   const isNameValid = name.trim().length >= 2;
-  // Expresión regular básica para validar que el email tenga algo@algo.algo
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); 
   const isMessageValid = message.trim().length > 10;
 
-  // El formulario solo es válido si todo lo anterior se cumple
   const isFormValid = isNameValid && isEmailValid && isMessageValid;
 
-  // Función para marcar un campo como "tocado" cuando el usuario sale de él (onBlur)
   const handleBlur = (field: string) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
 
-  // Función para manejar el envío del formulario (Abre el modal)
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
@@ -42,7 +34,6 @@ export default function Contact() {
     }
   };
 
-  // Acciones del modal
   const handleConfirm = () => {
     modalRef.current?.close();
     toast.success('¡Comentarios enviados con éxito a la productora!');
@@ -65,7 +56,6 @@ export default function Contact() {
 
       <form onSubmit={handleSubmit} className="bg-slate-800 p-8 rounded-xl shadow-xl border border-slate-700">
         
-        {/* Campo: Nombre */}
         <div className="mb-6">
           <label htmlFor="name" className="block text-slate-300 font-bold mb-2">Nombre</label>
           <input
@@ -81,7 +71,6 @@ export default function Contact() {
             }`}
             placeholder="Walter White"
           />
-          {/* Mensaje de error condicional */}
           {touched.name && !isNameValid && (
             <p className="text-red-400 text-sm mt-2 flex items-center gap-1">
               <span className="font-bold">⚠</span> El nombre debe tener al menos 2 letras.
@@ -89,7 +78,6 @@ export default function Contact() {
           )}
         </div>
 
-        {/* Campo: Correo Electrónico */}
         <div className="mb-6">
           <label htmlFor="email" className="block text-slate-300 font-bold mb-2">Correo Electrónico</label>
           <input
@@ -105,7 +93,6 @@ export default function Contact() {
             }`}
             placeholder="espectador@tvmaze.com"
           />
-          {/* Mensaje de error condicional */}
           {touched.email && !isEmailValid && (
             <p className="text-red-400 text-sm mt-2 flex items-center gap-1">
               <span className="font-bold">⚠</span> Ingresa un correo electrónico válido (ej. usuario@dominio.com).
@@ -113,7 +100,6 @@ export default function Contact() {
           )}
         </div>
 
-        {/* Campo: Mensaje */}
         <div className="mb-8">
           <label htmlFor="message" className="block text-slate-300 font-bold mb-2">Mensaje</label>
           <textarea
@@ -129,7 +115,6 @@ export default function Contact() {
             }`}
             placeholder="Me gustaría recomendar una serie..."
           ></textarea>
-          {/* Mensaje de error condicional */}
           {touched.message && !isMessageValid && (
             <p className="text-red-400 text-sm mt-2 flex items-center gap-1">
               <span className="font-bold">⚠</span> El mensaje debe tener más de 10 caracteres.
@@ -151,7 +136,6 @@ export default function Contact() {
         </button>
       </form>
 
-      {/* Modal con <dialog> nativo */}
       <dialog 
         ref={modalRef} 
         className="bg-slate-800 text-white p-0 rounded-xl shadow-2xl border border-slate-700 backdrop:bg-slate-950/80 backdrop:backdrop-blur-sm mx-auto my-auto open:flex flex-col max-w-md w-full"

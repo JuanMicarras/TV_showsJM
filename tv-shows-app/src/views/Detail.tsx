@@ -159,7 +159,6 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
             </div>
           </div>
 
-          {/* Botones de acción */}
           <div className="mt-auto flex flex-col sm:flex-row gap-4">
             <button 
               onClick={handleFavoriteClick}

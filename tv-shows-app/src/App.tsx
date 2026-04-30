@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import type { Show } from './types/tvmaze';
-// Importaciones de las vistas (las crearemos en el siguiente paso)
 import Navbar from './components/Navbar';
 import Home from './views/Home';
 import Explore from './views/Explore';
@@ -12,18 +11,15 @@ import Contact from './views/Contact';
 import NotFound from './views/NotFound';
 
 function App() {
-  // Inicializamos el estado usando TypeScript para decirle que es un array de objetos "Show"
   const [favorites, setFavorites] = useState<Show[]>(() => {
     const saved = localStorage.getItem('tvmaze-favorites');
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Guardar en localStorage cuando cambien los favoritos
   useEffect(() => {
     localStorage.setItem('tvmaze-favorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  // Función tipada para agregar/quitar favoritos
   const toggleFavorite = (show: Show) => {
     setFavorites((prevFavorites) => {
       const isFavorited = prevFavorites.some((fav) => fav.id === show.id);
@@ -39,7 +35,6 @@ function App() {
     <div className="min-h-screen bg-slate-900 text-slate-100 font-sans">
       
       <Navbar /> 
-      
       <main className="container mx-auto px-4 py-8">
         <Routes>
          <Route path="/" element={<Home />} />
@@ -50,7 +45,6 @@ function App() {
           <Route path="*" element={<NotFound />} /> 
         </Routes>
       </main>
-
       <Toaster position="bottom-right" toastOptions={{ duration: 3000 }} />
     </div>
   );

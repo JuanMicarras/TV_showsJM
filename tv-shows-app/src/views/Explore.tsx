@@ -37,10 +37,8 @@ export default function Explore({ favorites, toggleFavorite }: ExploreProps) {
     fetchShows();
   }, []);
 
-  // Extraemos todos los géneros únicos de las series cargadas para armar el <select>
   const allGenres = Array.from(new Set(shows.flatMap(show => show.genres))).sort();
 
-  // Búsqueda Y Filtrado combinados
   const filteredShows = shows.filter((show) => {
     const matchesSearch = show.name.toLowerCase().includes(search.toLowerCase());
     const matchesGenre = selectedGenre === '' || show.genres.includes(selectedGenre);
