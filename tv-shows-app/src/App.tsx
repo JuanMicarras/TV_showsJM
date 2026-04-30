@@ -5,7 +5,7 @@ import type { Show } from './types/tvmaze';
 import Navbar from './components/Navbar';
 import Home from './views/Home';
 
-// import Explore from './views/Explore';
+import Explore from './views/Explore';
 // import Detail from './views/Detail';
 // import Favorites from './views/Favorites';
 // import Contact from './views/Contact';
@@ -42,7 +42,7 @@ function App() {
       <main className="container mx-auto px-4 py-8">
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route path="/explore" element={<Explore favorites={favorites} toggleFavorite={toggleFavorite} />} /> */}
+          <Route path="/explore" element={<Explore favorites={favorites} toggleFavorite={toggleFavorite} />} />
           {/* <Route path="/show/:id" element={<Detail favorites={favorites} toggleFavorite={toggleFavorite} />} /> */}
           {/* <Route path="/favorites" element={<Favorites favorites={favorites} toggleFavorite={toggleFavorite} />} /> */}
           {/* <Route path="/contact" element={<Contact />} /> */}
