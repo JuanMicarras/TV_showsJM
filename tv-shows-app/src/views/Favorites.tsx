@@ -21,7 +21,7 @@ export default function Favorites({ favorites, toggleFavorite }: FavoritesProps)
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
           </svg>
           <h2 className="text-xl font-bold text-slate-300 mb-2">No hay favoritos guardados</h2>
-          <p className="text-slate-500">Explora el universo y guarda algunas series para verlas aquí.</p>
+          <p className="text-slate-500">Explora el catálogo y guarda algunas series para tu próxima maratón.</p>
         </div>
       ) : (
         /* Reutilizamos el componente Card para mostrar los favoritos */

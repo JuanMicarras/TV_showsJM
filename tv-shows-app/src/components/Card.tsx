@@ -1,5 +1,7 @@
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import ConfirmModal from './ConfirmModal';
 import type { Show } from '../types/tvmaze';
 
 interface CardProps {
@@ -9,22 +11,37 @@ interface CardProps {
 }
 
 export default function Card({ show, isFavorite, toggleFavorite }: CardProps) {
+  // Referencia para el modal de confirmación
+  const modalRef = useRef<HTMLDialogElement>(null);
+
   const handleFavoriteClick = () => {
-    toggleFavorite(show);
     if (isFavorite) {
-      toast.error(`${show.name} eliminado de favoritos`);
+      // Si ya es favorito, mostramos el modal llamando al método nativo
+      modalRef.current?.showModal();
     } else {
+      // Si no es favorito, lo agregamos directamente
+      toggleFavorite(show);
       toast.success(`${show.name} agregado a favoritos`);
     }
   };
 
-  // Imagen por defecto por si la API no trae una
+  // Funciones que le pasaremos al modal
+  const handleConfirmRemove = () => {
+    toggleFavorite(show); // Ejecuta la acción de quitar
+    toast.error(`${show.name} eliminado de favoritos`);
+    modalRef.current?.close(); // Cierra el modal
+  };
+
+  const handleCancelRemove = () => {
+    modalRef.current?.close(); // Solo cierra el modal
+  };
+
   const imageUrl = show.image?.medium || 'https://via.placeholder.com/210x295?text=No+Image';
 
   return (
     <div className="bg-slate-800 rounded-xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 transition-all flex flex-col h-full border border-slate-700 relative">
       
-      {/* Botón de Favorito en la esquina superior derecha */}
+      {/* Botón de Favorito */}
       <button 
         onClick={handleFavoriteClick}
         className="absolute top-2 right-2 p-2 bg-slate-900/80 rounded-full hover:bg-slate-700 transition z-10"
@@ -43,7 +60,6 @@ export default function Card({ show, isFavorite, toggleFavorite }: CardProps) {
           {show.genres.join(', ') || 'Sin género definido'}
         </p>
         
-        {/* Usamos mt-auto para empujar el botón al fondo de la tarjeta */}
         <Link 
           to={`/show/${show.id}`} 
           className="mt-auto block w-full text-center bg-slate-700 hover:bg-cyan-500 hover:text-slate-950 text-white font-semibold py-2 rounded transition-colors"
@@ -51,6 +67,15 @@ export default function Card({ show, isFavorite, toggleFavorite }: CardProps) {
           Ver Detalles
         </Link>
       </div>
+
+      {/* Renderizamos el Modal dentro de la tarjeta, pero estará oculto hasta llamar a showModal() */}
+      <ConfirmModal 
+        ref={modalRef}
+        title="¿Quitar de Favoritos?"
+        message={`¿Estás seguro de que deseas eliminar "${show.name}" de tu lista de maratón?`}
+        onConfirm={handleConfirmRemove}
+        onCancel={handleCancelRemove}
+      />
     </div>
   );
 }

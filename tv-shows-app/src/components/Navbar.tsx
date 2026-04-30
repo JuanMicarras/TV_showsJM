@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 
 export default function Navbar() {
-
+  // La función para darle estilos dinámicos al enlace activo
   const linkClasses = ({ isActive }: { isActive: boolean }) => 
     isActive 
       ? "text-cyan-400 font-bold border-b-2 border-cyan-400 pb-1" 
@@ -11,7 +11,7 @@ export default function Navbar() {
     <nav className="bg-slate-950 p-4 border-b border-slate-800 sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
         
-
+        {/* Logo con SVG inline directamente en el JSX */}
         <div className="flex items-center gap-2 text-2xl font-black text-white">
           <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-cyan-400">
             <rect width="20" height="15" x="2" y="7" rx="2" ry="2"/>
@@ -20,6 +20,7 @@ export default function Navbar() {
           TV<span className="text-cyan-400">Explorer</span>
         </div>
 
+        {/* Enlaces de navegación con NavLink */}
         <div className="flex gap-6">
           <NavLink to="/" className={linkClasses}>Inicio</NavLink>
           <NavLink to="/explore" className={linkClasses}>Explorar</NavLink>

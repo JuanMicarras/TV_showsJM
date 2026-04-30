@@ -23,8 +23,8 @@ export default function Explore({ favorites, toggleFavorite }: ExploreProps) {
         if (!response.ok) throw new Error('Error al cargar las series');
         
         const data = await response.json();
-        // Limitamos a 50 resultados para no sobrecargar la vista
-        setShows(data.slice(0, 50)); 
+        
+        setShows(data.slice(0, 500)); 
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Error desconocido');
       } finally {
@@ -43,8 +43,8 @@ export default function Explore({ favorites, toggleFavorite }: ExploreProps) {
   return (
     <div>
       {/* Encabezado y Buscador */}
-      <div className="mb-8 bg-slate-800 p-6 rounded-xl border border-slate-700 text-center">
-        <h1 className="text-3xl font-bold text-white mb-2">Explorar <span className="text-cyan-400">Personajes</span></h1>
+      <div role="search" className="mb-8 bg-slate-800 p-6 rounded-xl border border-slate-700 text-center">
+        <h1 className="text-3xl font-bold text-white mb-2">Explorar <span className="text-cyan-400">Series</span></h1>
         <p className="text-slate-400 mb-6">Encuentra tus series favoritas de la API</p>
         
         <input
@@ -60,14 +60,14 @@ export default function Explore({ favorites, toggleFavorite }: ExploreProps) {
       {loading && (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-cyan-400 mb-4"></div>
-          <p className="text-slate-400">Cargando universo...</p>
+          <p className="text-slate-400">Sintonizando canales...</p>
         </div>
       )}
 
       {error && !loading && (
         <div className="text-center py-20 bg-red-900/20 border border-red-500/50 rounded-xl">
           <span className="text-4xl block mb-2">⚠️</span>
-          <h2 className="text-xl font-bold text-red-400 mb-1">¡Universo colapsando!</h2>
+          <h2 className="text-xl font-bold text-red-400 mb-1">¡Señal Interrumpida!</h2>
           <p className="text-slate-300">{error}</p>
         </div>
       )}

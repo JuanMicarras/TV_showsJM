@@ -47,7 +47,7 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
     return (
       <div className="flex flex-col items-center justify-center py-32">
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-cyan-400 mb-4"></div>
-        <p className="text-slate-400">Desencriptando transmisión...</p>
+        <p className="text-slate-400">Procesando episodio...</p>
       </div>
     );
   }
@@ -82,7 +82,7 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
       <div className="md:flex">
         {/* Lado izquierdo: Imagen */}
         <div className="md:w-1/3 md:shrink-0">
-          <img src={imageUrl} alt={`Póster de ${show.name}`} className="h-full w-full object-cover md:h-[600px]" />
+          <img src={imageUrl} alt={`Póster de ${show.name}`} className="h-full w-full object-cover md:h-full min-h-[400px]" />
         </div>
         
         {/* Lado derecho: Info */}
@@ -100,7 +100,7 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
             </div>
             
             {/* Rating destacado */}
-            {show.rating.average && (
+            {show.rating?.average && (
               <div className="bg-cyan-900/50 border border-cyan-500/50 rounded-lg p-3 text-center min-w-[80px]">
                 <span className="block text-2xl font-black text-cyan-400">{show.rating.average}</span>
                 <span className="text-xs text-slate-400 uppercase">Rating</span>
@@ -108,24 +108,77 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
             )}
           </div>
 
-          {/* TVMaze devuelve el summary con etiquetas HTML (<b>, <p>), por eso usamos dangerouslySetInnerHTML */}
+          {/* Sinopsis */}
           <div 
-            className="text-slate-300 prose prose-invert mb-8 overflow-y-auto max-h-60 pr-4 custom-scrollbar"
+            className="text-slate-300 prose prose-invert mb-6 overflow-y-auto max-h-40 pr-4 custom-scrollbar"
             dangerouslySetInnerHTML={{ __html: show.summary || '<p>No hay sinopsis disponible para esta serie.</p>' }}
           />
 
-          <div className="mt-auto flex gap-4">
+          {/* NUEVA SECCIÓN: Cuadrícula de Metadatos */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8 bg-slate-900/50 p-5 rounded-xl border border-slate-700/50">
+            <div>
+              <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Estado</span>
+              <span className={`inline-block px-2 py-1 rounded text-xs font-bold ${show.status === 'Ended' ? 'bg-red-500/20 text-red-400' : 'bg-emerald-500/20 text-emerald-400'}`}>
+                {show.status}
+              </span>
+            </div>
+            
+            <div>
+              <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Idioma</span>
+              <p className="text-slate-200 text-sm font-medium">{show.language || 'N/A'}</p>
+            </div>
+
+            <div>
+              <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Cadena / Red</span>
+              <p className="text-slate-200 text-sm font-medium">{show.network?.name || 'Streaming / Web'}</p>
+            </div>
+
+            <div>
+              <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Duración</span>
+              <p className="text-slate-200 text-sm font-medium">{show.runtime ? `${show.runtime} min` : 'N/A'}</p>
+            </div>
+
+            <div>
+              <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Estreno</span>
+              <p className="text-slate-200 text-sm font-medium">{show.premiered || 'N/A'}</p>
+            </div>
+
+            {show.schedule?.days.length > 0 && (
+              <div>
+                <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Emisión</span>
+                <p className="text-slate-200 text-sm font-medium">
+                  {show.schedule.days.join(', ')} {show.schedule.time && `a las ${show.schedule.time}`}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Botones de acción */}
+          <div className="mt-auto flex flex-col sm:flex-row gap-4">
             <button 
               onClick={handleFavoriteClick}
               className={`flex-1 font-bold py-3 px-6 rounded transition flex items-center justify-center gap-2 ${isFavorite ? 'bg-amber-500/20 text-amber-500 border border-amber-500/50 hover:bg-amber-500/30' : 'bg-slate-700 text-white hover:bg-slate-600'}`}
             >
               {isFavorite ? '★ En Favoritos' : '☆ Agregar a Favoritos'}
             </button>
+
+            {/* Si tiene sitio oficial, mostramos un botón extra */}
+            {show.officialSite && (
+              <a 
+                href={show.officialSite}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-6 rounded transition text-center flex items-center justify-center gap-2"
+              >
+                Sitio Oficial ↗
+              </a>
+            )}
+
             <button 
               onClick={() => navigate(-1)} 
               className="flex-1 bg-transparent border border-slate-600 text-slate-300 hover:text-white hover:border-slate-400 font-bold py-3 px-6 rounded transition"
             >
-              Volver Atrás
+              Volver
             </button>
           </div>
         </div>
