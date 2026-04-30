@@ -6,8 +6,8 @@ import Navbar from './components/Navbar';
 import Home from './views/Home';
 
 import Explore from './views/Explore';
-// import Detail from './views/Detail';
-// import Favorites from './views/Favorites';
+import Detail from './views/Detail';
+import Favorites from './views/Favorites';
 // import Contact from './views/Contact';
 // import NotFound from './views/NotFound';
 
@@ -43,8 +43,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore favorites={favorites} toggleFavorite={toggleFavorite} />} />
-          {/* <Route path="/show/:id" element={<Detail favorites={favorites} toggleFavorite={toggleFavorite} />} /> */}
-          {/* <Route path="/favorites" element={<Favorites favorites={favorites} toggleFavorite={toggleFavorite} />} /> */}
+          <Route path="/show/:id" element={<Detail favorites={favorites} toggleFavorite={toggleFavorite} />} />
+          <Route path="/favorites" element={<Favorites favorites={favorites} toggleFavorite={toggleFavorite} />} />
           {/* <Route path="/contact" element={<Contact />} /> */}
           {/* <Route path="*" element={<NotFound />} /> */} 
         </Routes>
