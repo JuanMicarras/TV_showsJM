@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import type { Show } from '../types/tvmaze';
+import Loader from '../components/Loader';
+import ErrorMessage from '../components/ErrorMessage';
+import Badge from '../components/Badge';
 
 interface DetailProps {
   favorites: Show[];
@@ -9,20 +12,17 @@ interface DetailProps {
 }
 
 export default function Detail({ favorites, toggleFavorite }: DetailProps) {
-  // useParams captura el ":id" de la URL
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const [show, setShow] = useState<Show | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch individual por ID
   useEffect(() => {
     const fetchShowDetail = async () => {
       try {
         setLoading(true);
-        
         const response = await fetch(`https://api.tvmaze.com/shows/${id}?embed[]=seasons&embed[]=episodes`);
         
         if (response.status === 404) {
@@ -45,21 +45,13 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
   }, [id]);
 
   if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-32">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-cyan-400 mb-4"></div>
-        <p className="text-slate-400">Procesando episodio...</p>
-      </div>
-    );
+    return <Loader message="Procesando episodio..." />;
   }
-
   if (error || !show) {
     return (
-      <div className="text-center py-20 bg-red-900/20 border border-red-500/50 rounded-xl max-w-2xl mx-auto mt-10">
-        <span className="text-4xl block mb-2">📡</span>
-        <h2 className="text-xl font-bold text-red-400 mb-2">Señal Perdida</h2>
-        <p className="text-slate-300 mb-6">{error}</p>
-        <button onClick={() => navigate('/explore')} className="bg-slate-700 hover:bg-slate-600 text-white px-6 py-2 rounded transition">
+      <div className="flex flex-col items-center">
+        <ErrorMessage message={error || 'Señal perdida'} />
+        <button onClick={() => navigate('/explore')} className="mt-4 bg-slate-700 hover:bg-slate-600 text-white px-6 py-2 rounded transition">
           Volver a Explorar
         </button>
       </div>
@@ -93,9 +85,7 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
               <h1 className="text-3xl md:text-4xl font-black text-white mb-2">{show.name}</h1>
               <div className="flex flex-wrap gap-2 mb-4">
                 {show.genres.map(genre => (
-                  <span key={genre} className="bg-slate-700 text-cyan-300 text-xs font-bold px-3 py-1 rounded-full">
-                    {genre}
-                  </span>
+                  <Badge key={genre} text={genre} />
                 ))}
               </div>
             </div>
@@ -115,7 +105,7 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
             dangerouslySetInnerHTML={{ __html: show.summary || '<p>No hay sinopsis disponible para esta serie.</p>' }}
           />
 
-          {/* NUEVA SECCIÓN: Cuadrícula de Metadatos */}
+          {/* Cuadrícula de Metadatos */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8 bg-slate-900/50 p-5 rounded-xl border border-slate-700/50">
             <div>
               <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Estado</span>
@@ -143,6 +133,17 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
               <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Estreno</span>
               <p className="text-slate-200 text-sm font-medium">{show.premiered || 'N/A'}</p>
             </div>
+
+            {show.schedule?.days?.length > 0 && (
+              <div>
+                <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Emisión</span>
+                <p className="text-slate-200 text-sm font-medium">
+                  {show.schedule.days.join(', ')} {show.schedule.time && `a las ${show.schedule.time}`}
+                </p>
+              </div>
+            )}
+
+            {/* Temporadas y Episodios desde el _embedded */}
             <div>
               <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Temporadas</span>
               <p className="text-slate-200 text-sm font-medium">
@@ -156,15 +157,6 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
                 {show._embedded?.episodes?.length || 'N/A'}
               </p>
             </div>
-
-            {show.schedule?.days.length > 0 && (
-              <div>
-                <span className="block text-slate-500 text-xs uppercase font-bold mb-1">Emisión</span>
-                <p className="text-slate-200 text-sm font-medium">
-                  {show.schedule.days.join(', ')} {show.schedule.time && `a las ${show.schedule.time}`}
-                </p>
-              </div>
-            )}
           </div>
 
           {/* Botones de acción */}
@@ -176,7 +168,6 @@ export default function Detail({ favorites, toggleFavorite }: DetailProps) {
               {isFavorite ? '★ En Favoritos' : '☆ Agregar a Favoritos'}
             </button>
 
-            {/* Si tiene sitio oficial, mostramos un botón extra */}
             {show.officialSite && (
               <a 
                 href={show.officialSite}
